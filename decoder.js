@@ -17,8 +17,7 @@ function get_num(x, min, max, precision, round) {
   return Math.round(back_x * Math.pow(10, round)) / Math.pow(10, round);
 }
 
-function Decoder(bytes) {
-
+function Decode(fPort, bytes){
   var decoded = {};
   var cnt = 0;
   var resetCause_dict = {
@@ -33,7 +32,7 @@ function Decoder(bytes) {
 
 
   // settings
-  if (port === 3) {
+  if (fPort === 3) {
     decoded.system_status_interval = (bytes[1] << 8) | bytes[0];
     decoded.system_functions = {};//bytes[2];
     decoded.system_functions.gps_periodic = ((bytes[2] >> 0) & 0x01) ? 1 : 0;
@@ -72,7 +71,7 @@ function Decoder(bytes) {
     decoded.system_charge_max = bytes[23]*10+2500;
     decoded.system_input_charge_min = (bytes[25] << 8) | bytes[24];
   }
-  else if (port === 12) {
+  else if (fPort === 12) {
     decoded.resetCause = resetCause_dict[bytes[0]&0x07];
     decoded.system_state_timeout = bytes[0]>>3;
     decoded.battery = bytes[1]*10+2500; // result in mV
@@ -102,7 +101,7 @@ function Decoder(bytes) {
     var d= new Date(decoded.gps_time*1000);
     decoded.gps_time_decoded = d.toLocaleString();
   }
-  else if (port === 1) {
+  else if (fPort === 1) {
     decoded.lat = ((bytes[cnt++] << 16) >>> 0) + ((bytes[cnt++] << 8) >>> 0) + bytes[cnt++];
     decoded.lon = ((bytes[cnt++] << 16) >>> 0) + ((bytes[cnt++] << 8) >>> 0) + bytes[cnt++];
     if(decoded.lat!==0 && decoded.lon!==0){
@@ -123,7 +122,7 @@ function Decoder(bytes) {
     var d= new Date(decoded.time*1000);
     decoded.time_decoded = d.toLocaleString();
   }
-  else if (port === 11) {
+  else if (fPort === 11) {
     var locations=[];
     for(i = 0; i < 5; i++){
       var location={}
