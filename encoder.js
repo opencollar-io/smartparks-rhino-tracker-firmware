@@ -1,7 +1,7 @@
-function Encoder(object, port) {
+function Encoder(object, fport) {
     var bytes = [];
     //settings
-    if (port === 3){
+    if (fport === 3){
         bytes[0] = (object.system_status_interval) & 0xFF;
         bytes[1] = (object.system_status_interval)>>8 & 0xFF;
 
@@ -52,7 +52,7 @@ function Encoder(object, port) {
         bytes[24] = (object.system_input_charge_min) & 0xFF;
         bytes[25] = (object.system_input_charge_min)>>8 & 0xFF;
     }
-    else if (port === 30){
+    else if (fport === 30){
         bytes[0] = (object.freq_start) & 0xFF;
         bytes[1] = (object.freq_start)>>8 & 0xFF;
         bytes[2] = (object.freq_start)>>16 & 0xFF;
@@ -78,7 +78,7 @@ function Encoder(object, port) {
         bytes[17] = (object.type)>>8 & 0xFF;
     }
     //command
-    else if (port === 99){
+    else if (fport === 99){
         if(object.command.reset){
             bytes[0]=0xab;
         }
